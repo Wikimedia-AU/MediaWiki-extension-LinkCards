@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Sam Wilson"
+		]
+	},
+	"linkcards-desc": "A parser function to create linked 'card' UI components with image, title, and body text."
+}

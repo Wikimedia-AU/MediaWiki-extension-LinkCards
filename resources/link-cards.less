@@ -1,0 +1,60 @@
+@ext-linkcards-space: 12px;
+
+.ext-linkcards-card a {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #c0c0c0;
+	border-radius: calc( @ext-linkcards-space / 3 );
+	width: 100%;
+	max-width: 100%;
+	height: 100%;
+	margin: 0;
+	position: relative;
+	overflow: hidden;
+	color: inherit;
+
+	& > * {
+		margin: 0;
+		line-height: 1;
+	}
+
+	&:hover {
+		text-decoration: none;
+	}
+
+	&:link:hover {
+		// Only add hover background if it's an actual link.
+		background-color: #efefef;
+		border-color: #707070;
+	}
+
+	.ext-linkcards-main {
+		margin: @ext-linkcards-space;
+
+		& > * {
+			margin: 0;
+		}
+
+		.ext-linkcards-title {
+			display: block;
+			font-weight: bolder;
+			font-size: larger;
+			margin-bottom: @ext-linkcards-space;
+		}
+	}
+
+	.ext-linkcards-image {
+		overflow: hidden;
+		height: 300px;
+		display: block;
+		position: relative;
+
+		img {
+			display: block;
+			position: absolute;
+			object-fit: cover;
+			min-width: 100%;
+			min-height: 100%;
+		}
+	}
+}
