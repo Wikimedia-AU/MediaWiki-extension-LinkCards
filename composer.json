@@ -12,8 +12,7 @@
 		}
 	],
 	"support": {
-		"issues": "https://phabricator.wikimedia.org/tag/link-cards",
-		"source": "https://gerrit.wikimedia.org/r/mediawiki/extensions/LinkCards"
+		"issues": "https://phabricator.wikimedia.org/"
 	},
 	"require": {
 		"symfony/polyfill-php80": "^1.0"
@@ -26,6 +25,7 @@
 	},
 	"scripts": {
 		"test": [
+			"composer validate",
 			"parallel-lint . --exclude vendor --exclude node_modules",
 			"phpcs -p -s",
 			"minus-x check ."
