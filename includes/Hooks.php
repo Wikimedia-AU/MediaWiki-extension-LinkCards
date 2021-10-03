@@ -10,6 +10,9 @@ use Title;
 
 class Hooks implements ParserFirstCallInitHook {
 
+	/** @var int */
+	private $defaultImageWidth = 800;
+
 	/**
 	 * @param Parser $parser Parser object being initialised
 	 * @return bool|void True or no return value to continue or false to abort
@@ -33,7 +36,7 @@ class Hooks implements ParserFirstCallInitHook {
 				'title' => $args[ 'title' . $cardNum ] ?? false,
 				'body' => $args[ 'body' . $cardNum ] ?? false,
 				'image' => $args[ 'image' . $cardNum ] ?? false,
-				'image-width' => $args[ 'image-width' . $cardNum ] ?? 300,
+				'image-width' => $args[ 'image-width' . $cardNum ] ?? $this->defaultImageWidth,
 				'image-offset-dir' => $args[ 'image-offset-dir' . $cardNum ] ?? false,
 				'image-offset-val' => $args[ 'image-offset-val' . $cardNum ] ?? false,
 			];
@@ -52,7 +55,7 @@ class Hooks implements ParserFirstCallInitHook {
 			'title' => false,
 			'body' => false,
 			'image' => false,
-			'image-width' => 300,
+			'image-width' => $this->defaultImageWidth,
 			'image-offset-dir' => false,
 			'image-offset-val' => false,
 		] );
