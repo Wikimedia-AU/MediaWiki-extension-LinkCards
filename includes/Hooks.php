@@ -30,6 +30,7 @@ class Hooks implements ParserFirstCallInitHook {
 		$args = $this->parseArgs( func_get_args(), [] );
 		$cardNum = 1;
 		$html = '';
+		$perRow = isset( $args['perrow'] ) && is_numeric( $args['perrow'] ) ? (int)$args['perrow'] : null;
 		while ( isset( $args[ 'link' . $cardNum ] ) ) {
 			$cardArgs = [
 				'link' => $args[ 'link' . $cardNum ],
@@ -39,6 +40,7 @@ class Hooks implements ParserFirstCallInitHook {
 				'image-width' => $args[ 'image-width' . $cardNum ] ?? $this->defaultImageWidth,
 				'image-offset-dir' => $args[ 'image-offset-dir' . $cardNum ] ?? false,
 				'image-offset-val' => $args[ 'image-offset-val' . $cardNum ] ?? false,
+				'perrow' => $perRow,
 			];
 			$html .= $this->getCard( $cardArgs );
 			$cardNum++;
@@ -63,12 +65,14 @@ class Hooks implements ParserFirstCallInitHook {
 	}
 
 	/**
+	 * Add LinkCard's CSS module and get the output HTML.
+	 *
 	 * @param Parser $parser
 	 * @param string $html
 	 * @return mixed[]
 	 */
-	private function addModuleGetOutput( Parser $parser, $html ) {
-		$parser->getOutput()->addModuleStyles( 'ext.LinkCards' );
+	private function addModuleGetOutput( Parser $parser, string $html ): array {
+		$parser->getOutput()->addModuleStyles( [ 'ext.LinkCards' ] );
 		return [
 			0 => Html::rawElement( 'div', [ 'class' => 'ext-linkcards' ], $html ),
 			'isHTML' => true,
@@ -99,7 +103,9 @@ class Hooks implements ParserFirstCallInitHook {
 		}
 		$main = Html::rawElement( 'span', [ 'class' => 'ext-linkcards-main' ], $title . ' ' . $args['body'] );
 		$anchor = Html::rawElement( 'a', $anchorParams,  $this->getImageHtml( $args ) . ' ' . $main );
-		$card = Html::rawElement( 'div', [ 'class' => 'ext-linkcards-card' ], $anchor );
+		// Set per-row count to account for the gutter set in link-cards.less (of 1em).
+		$cardStyle = $args['perrow'] ? 'flex-basis: calc(' . ( 100 / $args['perrow'] ) . '% - 1em)' : null;
+		$card = Html::rawElement( 'div', [ 'class' => 'ext-linkcards-card', 'style' => $cardStyle ], $anchor );
 		return $card;
 	}
 
@@ -137,7 +143,7 @@ class Hooks implements ParserFirstCallInitHook {
 		$file = MediaWikiServices::getInstance()
 			->getRepoGroup()
 			->findFile( $imageTitle );
-		if ( !$file->exists() ) {
+		if ( !$file || !$file->exists() ) {
 			return '';
 		}
 		$mediaTransformOutput = $file->transform( [ 'width' => $args['image-width'] ] );
